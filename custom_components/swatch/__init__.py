@@ -78,6 +78,11 @@ def get_cameras_and_zones(config: dict[str, Any]) -> set[str]:
     return cameras_zones
 
 
+def get_audio_monitors(config: dict[str, Any]) -> set[str]:
+    """Get audio monitor names."""
+    return set(config.get("audio_monitors", {}).keys())
+
+
 async def async_setup(hass: HomeAssistant, config: Config) -> bool:
     """Set up this integration using YAML is not supported."""
     integration = await async_get_integration(hass, DOMAIN)

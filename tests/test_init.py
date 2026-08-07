@@ -6,6 +6,7 @@ from homeassistant.const import CONF_URL
 from pytest_homeassistant_custom_component.common import MockConfigEntry
 
 from custom_components.swatch import (
+    get_audio_monitors,
     get_cameras_and_zones,
     get_friendly_name,
     get_swatch_device_identifier,
@@ -46,6 +47,15 @@ def test_get_zones_and_objects():
 
 def test_get_cameras_and_zones():
     assert get_cameras_and_zones(SWATCH_API_CONFIG) == {"front_door", "porch"}
+
+
+def test_get_audio_monitors():
+    config = {**SWATCH_API_CONFIG, "audio_monitors": {"kitchen_hood": {}}}
+    assert get_audio_monitors(config) == {"kitchen_hood"}
+
+
+def test_get_audio_monitors_defaults_to_empty():
+    assert get_audio_monitors(SWATCH_API_CONFIG) == set()
 
 
 def test_get_swatch_entity_unique_id():
@@ -94,6 +104,25 @@ async def test_setup_and_unload_entry(hass, aioclient_mock):
 
     assert entry.state is ConfigEntryState.NOT_LOADED
     assert entry.entry_id not in hass.data[DOMAIN]
+
+
+async def test_setup_entry_creates_audio_monitor_entity(hass, aioclient_mock):
+    """A config with both zones/objects and audio_monitors should create an
+    entity for each."""
+    config_with_audio = {**SWATCH_API_CONFIG, "audio_monitors": {"kitchen_hood": {}}}
+    aioclient_mock.get(
+        f"{HOST}/api/all/latest", json={"kitchen_hood": {"result": True}}
+    )
+    aioclient_mock.get(f"{HOST}/api/config", json=config_with_audio)
+
+    entry = MockConfigEntry(domain=DOMAIN, data={CONF_URL: HOST})
+    entry.add_to_hass(hass)
+
+    assert await hass.config_entries.async_setup(entry.entry_id)
+    await hass.async_block_till_done()
+
+    entities = hass.states.async_entity_ids("binary_sensor")
+    assert len(entities) == 2
 
 
 async def test_setup_entry_fails_when_config_unreachable(hass, aioclient_mock):
