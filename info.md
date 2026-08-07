@@ -1,16 +1,16 @@
 <!-- markdownlint-disable first-line-heading -->
 <!-- markdownlint-disable no-inline-html -->
 
-<img src="https://raw.githubusercontent.com/NickM-27/swatch-hass-integration/master/images/swatch.png"
+<img src="https://raw.githubusercontent.com/MaiorDomus/swatch-hass-integration/master/images/swatch.png"
      alt="Swatch icon"
      width="16%"
      align="right"
      style="float: right; margin: 10px 0px 20px 20px;" />
 
-[![GitHub Release](https://img.shields.io/github/release/NickM-27/swatch-hass-integration.svg?style=flat-square)](https://github.com/NickM-27/swatch-hass-integration/releases)
-[![Build Status](https://img.shields.io/github/workflow/status/NickM-27/swatch-hass-integration/Build?style=flat-square)](https://github.com/NickM-27/swatch-hass-integration/actions/workflows/build.yaml)
-[![Test Coverage](https://img.shields.io/codecov/c/gh/NickM-27/swatch-hass-integration?style=flat-square)](https://app.codecov.io/gh/NickM-27/swatch-hass-integration/)
-[![License](https://img.shields.io/github/license/NickM-27/swatch-hass-integration.svg?style=flat-square)](LICENSE)
+[![GitHub Release](https://img.shields.io/github/release/MaiorDomus/swatch-hass-integration.svg?style=flat-square)](https://github.com/MaiorDomus/swatch-hass-integration/releases)
+[![Build Status](https://img.shields.io/github/workflow/status/MaiorDomus/swatch-hass-integration/Build?style=flat-square)](https://github.com/MaiorDomus/swatch-hass-integration/actions/workflows/build.yaml)
+[![Test Coverage](https://img.shields.io/codecov/c/gh/MaiorDomus/swatch-hass-integration?style=flat-square)](https://app.codecov.io/gh/MaiorDomus/swatch-hass-integration/)
+[![License](https://img.shields.io/github/license/MaiorDomus/swatch-hass-integration.svg?style=flat-square)](LICENSE)
 [![hacs](https://img.shields.io/badge/HACS-default-orange.svg?style=flat-square)](https://hacs.xyz)
 
 ## Why?
@@ -22,9 +22,9 @@ In this example you can see a cropped section of the street with a trash can. Th
 ![crop](https://user-images.githubusercontent.com/14866235/160126079-14dd083c-7ca8-4077-882c-3f5eddeaf6a0.jpg)
 ![crop-mask](https://user-images.githubusercontent.com/14866235/160126093-82cedb91-c04e-44a2-8f0f-154e084f2f8f.jpg)
 
-[Swatch Custom Component](https://github.com/NickM-27/swatch-hass-integration) for Home Assistant
+[Swatch Custom Component](https://github.com/MaiorDomus/swatch-hass-integration) for Home Assistant
 
-This is a custom component to integrate [Swatch](https://github.com/NickM-27/swatch) into [Home Assistant](https://www.home-assistant.io).
+This is a custom component to integrate [Swatch](https://github.com/MaiorDomus/swatch) into [Home Assistant](https://www.home-assistant.io).
 
 Provides the following:
 - Binary Sensor entities (Zone + Object Sensors)
