@@ -10,6 +10,7 @@ from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import ATTR_MODEL, CONF_URL
 from homeassistant.core import HomeAssistant
 from homeassistant.core_config import Config
+from homeassistant.helpers import device_registry as dr
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from homeassistant.helpers.entity import Entity
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
@@ -115,6 +116,17 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         config = await client.async_get_config()
     except SwatchApiClientError:
         return False
+
+    # Per-camera/zone/audio-monitor devices declare this as their via_device,
+    # so it needs to exist or Home Assistant warns (and eventually errors).
+    device_registry = dr.async_get(hass)
+    device_registry.async_get_or_create(
+        config_entry_id=entry.entry_id,
+        identifiers={get_swatch_device_identifier(entry)},
+        name=NAME,
+        manufacturer=NAME,
+        model=model,
+    )
 
     hass.data[DOMAIN][entry.entry_id] = {
         ATTR_CLIENT: client,
