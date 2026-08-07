@@ -86,6 +86,18 @@ async def test_is_on_false_when_coordinator_reports_no_result(make_sensor):
     assert sensor.is_on is False
 
 
+async def test_is_on_resets_to_false_when_result_key_goes_missing(make_sensor):
+    """Regression: a miss with zero color matches used to leave
+    latest_results[obj] as a bare {} (no "result" key). The sensor treated
+    that as "no new data" and kept showing the previous on-state forever
+    instead of flipping to off once the real state changed."""
+    sensor = make_sensor(coordinator_data={"person": {"result": True}})
+    assert sensor.is_on is True
+
+    sensor.coordinator.data = {"person": {}}
+    assert sensor.is_on is False
+
+
 async def test_is_on_defaults_false_with_no_coordinator_data(make_sensor):
     sensor = make_sensor(coordinator_data=None)
     assert sensor.is_on is False

@@ -133,12 +133,12 @@ class SwatchObjectSensor(SwatchEntity, BinarySensorEntity, CoordinatorEntity):  
     def is_on(self) -> bool:
         """Return true if the binary sensor is on."""
         if self.coordinator.data:
+            # A missing "result" (e.g. a miss with zero color matches) means
+            # data is None here, which must count as off -- not "keep
+            # whatever we last had", or a real off-state never gets reflected
+            # once the entity has seen an on-state at least once.
             data = self.coordinator.data.get(self._obj_name, {}).get("result")
-            if data is not None:
-                try:
-                    self._is_on = bool(data)
-                except ValueError:
-                    pass
+            self._is_on = bool(data)
 
         return self._is_on
 
