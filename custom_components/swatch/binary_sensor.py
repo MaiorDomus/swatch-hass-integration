@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import logging
-from typing import Any, cast
+from typing import Any
 
 import voluptuous as vol
 from homeassistant.components.binary_sensor import (
@@ -13,6 +13,7 @@ from homeassistant.components.binary_sensor import (
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers import entity_platform
+from homeassistant.helpers.device_registry import DeviceInfo
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
@@ -106,7 +107,7 @@ class SwatchObjectSensor(SwatchEntity, BinarySensorEntity, CoordinatorEntity):  
         )
 
     @property
-    def device_info(self) -> dict[str, Any]:
+    def device_info(self) -> DeviceInfo:
         """Return device information."""
         return {
             "identifiers": {
@@ -137,9 +138,9 @@ class SwatchObjectSensor(SwatchEntity, BinarySensorEntity, CoordinatorEntity):  
         return self._is_on
 
     @property
-    def device_class(self) -> str:
+    def device_class(self) -> BinarySensorDeviceClass:
         """Return the device class."""
-        return cast(str, BinarySensorDeviceClass.OCCUPANCY)
+        return BinarySensorDeviceClass.OCCUPANCY
 
     async def detect_object(self, image_url=None):
         """Detect an object."""
@@ -148,8 +149,8 @@ class SwatchObjectSensor(SwatchEntity, BinarySensorEntity, CoordinatorEntity):  
                 resp = await self._api.async_detect_camera(self._cam_name, image_url)
             else:
                 resp = await self._api.async_detect_camera(self._cam_name)
-        except SwatchApiClientError:
-            _LOGGER.error(f"Some error occurred")
+        except SwatchApiClientError as exc:
+            _LOGGER.error("Error detecting object for %s: %s", self._cam_name, exc)
             return
 
         if resp:

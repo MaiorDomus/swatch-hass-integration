@@ -33,9 +33,12 @@ def get_config_entry_title(url_str: str) -> str:
     return str(url).replace("http://", "")
 
 
+HOST_VALIDATION_TIMEOUT = 10
+
+
 def validate_host(host) -> bool:
     """Validate if Swatch host is valid."""
-    resp = requests.get(host)
+    resp = requests.get(host, timeout=HOST_VALIDATION_TIMEOUT)
 
     if not resp or resp.status_code != 200:
         return False
@@ -87,6 +90,9 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             _LOGGER.exception("Unexpected exception")
             errors["base"] = "unknown"
         else:
+            await self.async_set_unique_id(info[CONF_URL])
+            self._abort_if_unique_id_configured()
+
             return self.async_create_entry(
                 title=info["title"],
                 data=user_input,

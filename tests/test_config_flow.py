@@ -4,6 +4,7 @@ from unittest.mock import patch
 
 from homeassistant import config_entries, data_entry_flow
 from homeassistant.const import CONF_URL
+from pytest_homeassistant_custom_component.common import MockConfigEntry
 
 from custom_components.swatch.config_flow import get_config_entry_title
 from custom_components.swatch.const import DOMAIN
@@ -62,6 +63,27 @@ async def test_user_flow_cannot_connect(hass, requests_mock):
 
     assert result["type"] == data_entry_flow.FlowResultType.FORM
     assert result["errors"] == {"base": "cannot_connect"}
+
+
+async def test_user_flow_aborts_on_duplicate_host(hass, requests_mock):
+    """Adding the same host twice should abort instead of creating a duplicate."""
+    requests_mock.get(HOST, status_code=200)
+    existing_entry = MockConfigEntry(
+        domain=DOMAIN, unique_id=HOST, data={CONF_URL: HOST}
+    )
+    existing_entry.add_to_hass(hass)
+
+    with patch("custom_components.swatch.async_setup_entry", return_value=True):
+        result = await hass.config_entries.flow.async_init(
+            DOMAIN, context={"source": config_entries.SOURCE_USER}
+        )
+        result = await hass.config_entries.flow.async_configure(
+            result["flow_id"], {CONF_URL: HOST}
+        )
+        await hass.async_block_till_done()
+
+    assert result["type"] == data_entry_flow.FlowResultType.ABORT
+    assert result["reason"] == "already_configured"
 
 
 async def test_user_flow_unexpected_exception(hass, requests_mock):
