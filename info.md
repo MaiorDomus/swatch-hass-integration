@@ -28,6 +28,7 @@ This is a custom component to integrate [Swatch](https://github.com/MaiorDomus/s
 
 Provides the following:
 - Binary Sensor entities (Zone + Object Sensors)
+- Binary Sensor entities for Audio Monitors (sustained mechanical noise, e.g. a kitchen hood fan)
 - Support for multiple Swatch instances.
 
 ## Information on Swatch (Available as an Addon)

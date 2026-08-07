@@ -18,6 +18,7 @@
 Provides the following:
 
 - Binary Sensor entities (Object + Zone detection)
+- Binary Sensor entities for Audio Monitors (sustained mechanical noise, e.g. a kitchen hood fan)
 - Support for multiple Swatch instances.
 
 ## Installation
