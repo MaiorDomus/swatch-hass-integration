@@ -1,11 +1,10 @@
 -r requirements.txt
 black
 flake8
-mypy==0.910
+mypy==2.3.0
 pre-commit
-pytest==6.2.5
-pytest-homeassistant-custom-component==0.13.36
+pytest-homeassistant-custom-component==0.13.354
 pylint-pytest
-pylint==2.8.3
-pytest-aiohttp==0.3.0
+pylint
+pytest-aiohttp==1.1.1
 types-python-dateutil

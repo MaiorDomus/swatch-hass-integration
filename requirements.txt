@@ -1,6 +1,4 @@
-aiohttp
-aiohttp_cors==0.7.0
-attr
-homeassistant==2025.11
-atomicwrites==1.4.0
-yarl
+aiohttp==3.14.3
+homeassistant==2026.8.0
+requests==2.34.2
+yarl==1.24.5

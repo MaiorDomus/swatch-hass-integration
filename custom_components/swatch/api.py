@@ -3,10 +3,9 @@
 import asyncio
 import logging
 import socket
-from typing import Any, Dict, cast
+from typing import Any, cast
 
 import aiohttp
-import async_timeout
 from yarl import URL
 
 TIMEOUT = 10
@@ -40,7 +39,7 @@ class SwatchApiClient:
     async def async_get_config(self) -> dict[str, Any]:
         """Get data from the API."""
         return cast(
-            Dict[str, Any],
+            dict[str, Any],
             await self.api_wrapper("get", str(URL(self._host) / "api/config")),
         )
 
@@ -52,7 +51,7 @@ class SwatchApiClient:
         """Get data from the API."""
         if image_url:
             return cast(
-                Dict[str, Any],
+                dict[str, Any],
                 await self.api_wrapper(
                     "post",
                     str(
@@ -63,7 +62,7 @@ class SwatchApiClient:
             )
         else:
             return cast(
-                Dict[str, Any],
+                dict[str, Any],
                 await self.api_wrapper(
                     "post", str(URL(self._host) / f"api/{camera_name}/detect")
                 ),
@@ -72,7 +71,7 @@ class SwatchApiClient:
     async def async_get_object_state(self, object_name: str) -> dict[str, Any]:
         """Get latest object state from the API."""
         return cast(
-            Dict[str, Any],
+            dict[str, Any],
             await self.api_wrapper(
                 "get", str(URL(self._host) / f"api/{object_name}/latest")
             ),
@@ -93,7 +92,7 @@ class SwatchApiClient:
             headers = {}
 
         try:
-            async with async_timeout.timeout(TIMEOUT):
+            async with asyncio.timeout(TIMEOUT):
                 if method == "get":
                     response = await self._session.get(
                         url, headers=headers, raise_for_status=True
@@ -114,7 +113,7 @@ class SwatchApiClient:
                     if response:
                         return await response.json()
 
-        except asyncio.TimeoutError as exc:
+        except TimeoutError as exc:
             _LOGGER.error(
                 "Timeout error fetching information from %s: %s",
                 url,
